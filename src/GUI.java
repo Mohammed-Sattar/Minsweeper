@@ -9,15 +9,18 @@ public class GUI extends JFrame{
     private int numCells_X;
     private int numCells_Y;
     private int spacing = 2;
+    private int pixelSize = 50;
 
     public GUI (int width_x, int height_y) {
         this.numCells_X = width_x;
         this.numCells_Y = height_y;
-        this.width_x = (width_x *= 50);
-        this.height_y = (height_y *= 50);
+
+        this.width_x = (width_x *= (pixelSize + 2));    //window size = total number of boxes x (size of each box + 2 pixels for spaciing inbetween)
+        height_y++;         //create extra row at top for menu buttons
+        this.height_y = (height_y *= 52);
 
         this.setTitle("Minesweeper");
-        this.setSize ((width_x+ 6), (height_y+ 29));
+        this.setSize ((width_x+ 6), (height_y+ (pixelSize + 2)));   //window size = total number of boxes x (size of each box + 2 pixels for spaciing inbetween)
         // this.setSize (((1280) + 6), ((800) + 29));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -68,7 +71,7 @@ public class GUI extends JFrame{
 
     public class Board extends JPanel {
         public void paintComponent(Graphics g) {
-            g.setColor(Color.red);
+            g.setColor(Color.DARK_GRAY);
             g.fillRect(0, 0, width_x, height_y);
 
             g.setColor(Color.GRAY);

@@ -82,7 +82,7 @@ public class GameGrid {
 
 
 
-    // This method randomly generates unique coordinates for where the bombs will be placed
+    // This method randomly generates unique coordinates for where the bombs will be placed & assigns -1 to the coordinate
     private void generateBombCoordinates (int[] firstClick) {
         Random rand = new Random(); 
 

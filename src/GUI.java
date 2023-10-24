@@ -5,12 +5,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class GUI extends JFrame{
-     
+public class GUI extends JFrame implements Game{
+
+    // Inherited attributes from Game interface
+    private int width_x;
+    private int height_y;
+    private int numOfBombs;
+    private int [][] grid;
+
+    // Local attributes for GUI
     private int window_width;
     private int window_height;
-    private int numCells_X;
-    private int numCells_Y;
     private int spacing = 2;
     private int cellPixels = 50;
 
@@ -18,8 +23,8 @@ public class GUI extends JFrame{
     int mouseY = -100;
 
     public GUI (int width_x, int height_y) {
-        this.numCells_X = width_x;
-        this.numCells_Y = height_y;
+        this.width_x = width_x;
+        this.height_y = height_y;
 
         width_x = (width_x * (cellPixels + 2)); //window width = total number of boxes x (size of each box + 2 pixels for spacing inbetween)
         height_y++; //create extra row at top for menu buttons
@@ -27,9 +32,6 @@ public class GUI extends JFrame{
 
         width_x += 6; //add 6 pixels to width, 3 for right side & 3 for left
         height_y += 29; //add 29 pixels to height for the top bar
-        // this.window_width = (width_x *= (pixelSize + 2));    //window size = total number of boxes x (size of each box + 2 pixels for spaciing inbetween)
-        // height_y++;         //create extra row at top for menu buttons
-        // this.window_height = (height_y *= (pixelSize + 2));
 
         this.window_width = width_x;
         this.window_height = height_y;
@@ -56,6 +58,66 @@ public class GUI extends JFrame{
     }
     
 
+
+
+
+
+    // Overriden Getter & Setter methods for grid implementation from interface Game
+    @Override
+    public int [][] getGrid() {
+        return this.grid;
+    }
+    @Override
+    public void setGrid (int [][] grid) {
+        this.grid = grid;
+    }
+
+
+    public int getCellValue (int x, int y) {
+        return this.grid[x][y];
+    }
+
+    public void setCellValue (int x, int y, int value) {
+        this.grid[x][y] = value;
+    }
+
+
+    // Overriden Getter & Setter methods for width_x attribute, implementation from interface Game
+    @Override
+    public int getWidth_x() {
+        return this.width_x;
+    }
+    @Override
+    public void setWidth_x(int width_x) {
+        this.width_x = width_x;
+    }
+
+
+    // Overriden Getter & Setter methods for height_y attribute, implementation from interface Game
+    @Override
+    public int getHeight_y() {
+        return this.height_y;
+    }
+    @Override
+    public void setHeight_y(int height_y) {
+        this.height_y = height_y;
+    }
+
+
+    // Overriden Getter & Setter methods for numOfBombs attribute, implementation from interface Game
+    @Override
+    public int getNumOfBombs() {
+        return this.numOfBombs;
+    }
+    @Override
+    public void setNumOfBombs(int numOfBombs) {
+        this.numOfBombs = numOfBombs;
+    }
+
+
+
+
+
     public int getWindow_width() {
         return window_width;
     }
@@ -72,21 +134,6 @@ public class GUI extends JFrame{
     }
 
 
-    public int getNumCells_X() {
-        return numCells_X;
-    }
-    public void setNumCells_X(int numCells_X) {
-        this.numCells_X = numCells_X;
-    }
-
-    
-    public int getNumCells_Y() {
-        return numCells_Y;
-    }
-    public void setNumCells_Y(int numCells_Y) {
-        this.numCells_Y = numCells_Y;
-    }
-
 
 
 
@@ -98,8 +145,8 @@ public class GUI extends JFrame{
             g.setColor(Color.DARK_GRAY);
             g.fillRect(0, 0, window_width, window_height);
 
-            for (int x = 0; x < getNumCells_X(); x++) {
-                for (int y = 0; y < getNumCells_Y(); y++) {
+            for (int x = 0; x < getWidth_x(); x++) {
+                for (int y = 0; y < getHeight_y(); y++) {
                     g.setColor(Color.GRAY);
 
                     // the following 2 arrays save the min and max coordinates of each box in the grid
@@ -109,10 +156,6 @@ public class GUI extends JFrame{
                     if (mouseX >= 6 + spacing + (x * cellPixels) && mouseX < 6 + ((x+1) * cellPixels) - spacing && mouseY >= 29 + spacing + ((y + 1)*cellPixels) && mouseY < 29 + ((y + 2) * cellPixels) - spacing) {
                         g.setColor(Color.LIGHT_GRAY);
                     }
-
-                    // if ((mouseX >= (x * cellPixels) + spacing) && (mouseX < spacing + (x * cellPixels) + cellPixels - 2*spacing) ) {
-                    //     g.setColor(Color.LIGHT_GRAY);
-                    // }
 
                     g.fillRect(spacing+(x * cellPixels), spacing+(y * cellPixels)+cellPixels, cellPixels-(2*spacing), cellPixels-(2*spacing));
                 }
@@ -182,8 +225,8 @@ public class GUI extends JFrame{
 
 
     public int inBox_X() {
-        for (int x = 0; x < getNumCells_X(); x++) {
-            for (int y = 0; y < getNumCells_Y(); y++) {
+        for (int x = 0; x < getWidth_x(); x++) {
+            for (int y = 0; y < getHeight_y(); y++) {
 
                 if (mouseX >= 6 + spacing + (x * cellPixels) && mouseX < 6 + ((x + 1) * cellPixels) - spacing
                         && mouseY >= 29 + spacing + ((y + 1) * cellPixels)
@@ -197,8 +240,8 @@ public class GUI extends JFrame{
     }
 
     public int inBox_Y () {
-        for (int x = 0; x < getNumCells_X(); x++) {
-            for (int y = 0; y < getNumCells_Y(); y++) {
+        for (int x = 0; x < getWidth_x(); x++) {
+            for (int y = 0; y < getHeight_y(); y++) {
 
                 if (mouseX >= 6 + spacing + (x * cellPixels) && mouseX < 6 + ((x + 1) * cellPixels) - spacing
                         && mouseY >= 29 + spacing + ((y + 1) * cellPixels)

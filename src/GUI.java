@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -152,12 +151,16 @@ public class GUI extends JFrame implements Game{
                     // the following 2 arrays save the min and max coordinates of each box in the grid
                     // int [] box_Xcoordinates = {6 + spacing + (x * cellPixels), 6 + ((x+1) * cellPixels) - spacing};
                     // int [] box_Ycoordinates = { 29 + spacing + ((y + 1)*cellPixels), 29 + ((y + 2) * cellPixels) - spacing};
-                    
-                    if (mouseX >= 6 + spacing + (x * cellPixels) && mouseX < 6 + ((x+1) * cellPixels) - spacing && mouseY >= 29 + spacing + ((y + 1)*cellPixels) && mouseY < 29 + ((y + 2) * cellPixels) - spacing) {
+
+                    if (mouseX >= 6 + spacing + (x * cellPixels) && mouseX < 6 + ((x + 1) * cellPixels) - spacing
+                            && mouseY >= 29 + spacing + ((y + 1) * cellPixels)
+                            && mouseY < 29 + ((y + 2) * cellPixels) - spacing) {
+
                         g.setColor(Color.LIGHT_GRAY);
                     }
 
-                    g.fillRect(spacing+(x * cellPixels), spacing+(y * cellPixels)+cellPixels, cellPixels-(2*spacing), cellPixels-(2*spacing));
+                    g.fillRect(spacing + (x * cellPixels), spacing + (y * cellPixels) + cellPixels,
+                            cellPixels - (2 * spacing), cellPixels - (2 * spacing));
                 }
             }
         }
@@ -174,8 +177,6 @@ public class GUI extends JFrame implements Game{
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
             mouseX = e.getX();
             mouseY = e.getY();
             // System.out.println("Mouse posistion; x: " + mouseX + ", y: " + mouseY);
@@ -188,10 +189,13 @@ public class GUI extends JFrame implements Game{
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            // TODO Auto-generated method stub
-            // throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
             if (inBox_X() != -1 && inBox_Y() != -1) {
-                System.out.println("The mouse is in [" + inBox_X() + "," +inBox_Y() + "]");
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    System.out.print("Left clicked in box ");
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    System.out.print("Right clicked in box ");
+                }
+                System.out.println("[" + inBox_X() + "," +inBox_Y() + "]");
             } else {
                 System.out.println("The mouse is not inside a box");
             }            

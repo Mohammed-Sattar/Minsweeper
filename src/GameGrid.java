@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.Set;
+import java.util.Arrays;
 import java.util.HashSet;
 // import java.util.Iterator;
 
@@ -114,11 +115,12 @@ public class GameGrid implements Game{
 
             boolean isCoordinateAdded = bombCoordinatesSet.add(coordinate);
 
-            if (isCoordinateAdded) {
+            if (isCoordinateAdded && getCellValue(x, y) != -1) {
 
                 setCellValue(x, y, -1);
 
                 count++;
+                System.out.println("Generated " + count + " out of " + numOfCord + " coordinates; " + Arrays.toString(coordinate));
             }
         }   
 

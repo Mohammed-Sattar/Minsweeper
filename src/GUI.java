@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Arrays;
+import java.util.Date;
 
 public class GUI extends JFrame{
 
@@ -18,12 +18,18 @@ public class GUI extends JFrame{
     private int spacing = 2;
     private int cellPixels = 50;
 
+    Date startDate = new Date();
+    int sec = 0;
+    int countFlags = 0;
+
     int mouseX = -100;
     int mouseY = -100;
 
     public GUI (int y_rows, int x_cols) {
         this.x_cols = x_cols;
         this.y_rows = y_rows;
+
+        System.err.println("5 .. Executing in GUI");
 
         x_cols = (x_cols * (cellPixels + 2)); //window width = total number of boxes x (size of each box + 2 pixels for spacing inbetween)
         y_rows++; //create extra row at top for menu buttons
@@ -44,6 +50,7 @@ public class GUI extends JFrame{
 
         Board board = new Board();
         this.setContentPane(board);
+        System.out.println("7 .. executing in Graphics (Board)");
 
         Move move = new Move();
         this.addMouseMotionListener(move);
@@ -140,13 +147,15 @@ public class GUI extends JFrame{
     public class Board extends JPanel {
         
         public void paintComponent(Graphics g) {
-
+            System.out.println("7 .. executing in Graphics (Board)");
             
             // int cellPixels = 50;
 
             g.setColor(Color.DARK_GRAY);
             g.fillRect(0, 0, window_width, window_height);
 
+            topBar(g);
+            System.out.println("8 .. executing in Graphics (Board)");
 
             for (int x = 0; x < getX_cols(); x++) {
                 for (int y = 0; y < getY_rows(); y++) {
@@ -200,6 +209,36 @@ public class GUI extends JFrame{
                             cellPixels - (2 * spacing), cellPixels - (2 * spacing));
         }
 
+        
+        private void topBar (Graphics g) {
+            int x_start = (int)(window_width/2-cellPixels) ;
+            int y_start = 35;
+            int x_span = 90;
+            int y_span = 30;
+
+            g.setColor(new Color(100, 100, 100));
+            g.fill3DRect(x_start, (int)(y_start/2.5), x_span, y_span, rootPaneCheckingEnabled);
+
+            g.setColor(new Color(230, 230, 250));
+            g.setFont(new Font("Tahoma", Font.BOLD, 15));
+            g.drawString("New Game", x_start+3, y_start);
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+            g.drawString(("!:(" + Integer.toString(countFlags) +"/"+ Integer.toString(getNumOfBombs())+")"), 10, y_start);
+
+
+            // x_start = (int)(window_width - 1.4*cellPixels);
+            // g.setColor(new Color(47, 79, 79));
+            // g.fillRoundRect(x_start, (int)(y_start/2.5), 56, y_span, 15, 20);
+            // g.setColor(new Color(240, 255, 255));
+            // g.setFont(new Font("Times New Roman", Font.ITALIC, 15));
+
+            // sec = (int)((new Date().getTime()-startDate.getTime()) / 1000);
+            // g.drawString("time:" + Integer.toString(sec), x_start+5, y_start);
+
+        }
+
 
     }
 
@@ -227,7 +266,13 @@ public class GUI extends JFrame{
         @Override
         public void mouseClicked(MouseEvent e) {
 
-            if (inBox_Y() != -1 && inBox_X() != -1) {
+            if (inBox_Y() == -2 && inBox_X() == -2) {
+                System.out.println("New Game Clicked!!");
+                new NewGameGUI();
+                System.exit(0);
+
+
+            } else if (inBox_Y() != -1 && inBox_X() != -1) {
                 int cellVal = getCellValue(inBox_Y(), inBox_X());
 
                 if (e.getButton() == MouseEvent.BUTTON1) {
@@ -235,8 +280,9 @@ public class GUI extends JFrame{
                     if (count == 1) {
                         System.out.print("First click: ");
                         int [] fc = {inBox_Y(), inBox_X()};
-
+                        
                         setFirstClick(fc);
+                        countFlags = 0;
                     }
 
                     if (cellVal == -1) {
@@ -258,11 +304,14 @@ public class GUI extends JFrame{
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
 
                     if (!isCellOpen(inBox_Y(), inBox_X()) && !isCellFlagged(inBox_Y(), inBox_X())) {
+
                         setCellValue(inBox_Y(), inBox_X(), cellVal += 20);
+                        ++countFlags;
 
                     } else if (!isCellOpen(inBox_Y(), inBox_X()) && isCellFlagged(inBox_Y(), inBox_X())) {
 
                         setCellValue(inBox_Y(), inBox_X(), cellVal -= 20);
+                        --countFlags;
                     }
                     System.out.print("Right clicked in box ");
                 }
@@ -353,6 +402,11 @@ public class GUI extends JFrame{
                         && mouseY >= 29 + spacing + ((y + 1) * cellPixels)
                         && mouseY < 29 + ((y + 2) * cellPixels) - spacing) {
                     return x;
+
+                } else if (mouseX >= (window_width/2-1.2*cellPixels) && mouseX <= (window_width/2-1.2*cellPixels + 119)
+                    && mouseY >= 35 && mouseY <= 65) {
+
+                    return -2;
                 }
 
             }
@@ -368,6 +422,11 @@ public class GUI extends JFrame{
                         && mouseY >= 29 + spacing + ((y + 1) * cellPixels)
                         && mouseY < 29 + ((y + 2) * cellPixels) - spacing) {
                     return y;
+
+                } else if (mouseX >= (window_width/2-1.2*cellPixels) && mouseX <= (window_width/2-1.2*cellPixels + 119)
+                    && mouseY >= 35 && mouseY <= 65) {
+
+                    return -2;
                 }
 
             }
@@ -402,7 +461,7 @@ public class GUI extends JFrame{
     public boolean isCellFlagged (int y, int x) {
         boolean isFlagged = false;
         int cellVal = getCellValue(y, x);
-
+        
         if (cellVal >= 19 && cellVal <= 28) {
             isFlagged = true;
         }

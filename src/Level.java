@@ -1,4 +1,6 @@
-public class Level {
+import javax.swing.SwingUtilities;
+
+public class Level{
 
 
     private int width_x;
@@ -8,11 +10,24 @@ public class Level {
     
     // Constructor that allows manual definition of grid size & bomb count
     public Level (int width_x, int height_y, int numOfBombs) {
+        
+
         this.width_x = width_x;
         this.height_y = height_y;
         this.numOfBombs = numOfBombs;
 
-        GameGrid game = new GameGrid(width_x, height_y, numOfBombs);
+        // new GUI(height_y, width_x);      
+        // GameGrid game = new GameGrid(height_y, width_x, numOfBombs);
+        // game.runner();
+        // game.printToString();
+
+
+        SwingUtilities.invokeLater(() -> {
+            new GUI(height_y, width_x);
+            GameGrid game = new GameGrid(height_y, width_x, numOfBombs);
+            game.runner();
+            game.printToString();
+        });
 
     }
 
@@ -21,21 +36,45 @@ public class Level {
 
         switch (selectedLevel){
             case "Very Easy":
-                level_VeryEasy();
+                    this.width_x = 5;
+                    this.height_y = 5;
+                    this.numOfBombs = 5; 
                 break;
             case "Easy":
-                level_Easy();
+                    this.width_x = 8;
+                    this.height_y = 8;
+                    this.numOfBombs = 10;
                 break;
             case "Medium":
-                level_Medium();
+                    this.width_x = 16;
+                    this.height_y = 16;
+                    this.numOfBombs = 40;
                 break;
             case "Hard":
-                level_Hard();
+                this.width_x = 30;
+                this.height_y = 16;
+                this.numOfBombs = 99;
                 break;
             default:
             
-
         }
+        // System.out.println("Selected level: " + selectedLevel);
+        // System.out.println("1 .. Still Executing in Level Constructor");
+        // new GUI(height_y, width_x);      
+        // System.out.println("2 .. Still Executing in Level Constructor");
+        // GameGrid game = new GameGrid(height_y, width_x, numOfBombs);
+        // System.out.println("3 .. Still Executing in Level Constructor");
+        // game.runner();
+        // game.printToString();
+        // System.out.println("4 .. Still Executing in Level Constructor");
+
+
+        SwingUtilities.invokeLater(() -> {
+            new GUI(height_y, width_x);
+            GameGrid game = new GameGrid(height_y, width_x, numOfBombs);
+            game.runner();
+            game.printToString();
+        });
 
     }
 
@@ -50,50 +89,6 @@ public class Level {
     public void setNumOfBombs(int numOfBombs) {
         this.numOfBombs = numOfBombs;
     }
-    
-
-
-    // Methods that define default grid size and number of bombs according to the level
-    public void level_VeryEasy () {
-        int width_x = 5;
-        int height_y = 5;
-        int numOfBombs = 5;
-
-        Level veryEasy = new Level (width_x, height_y, numOfBombs);
-
-    }
-
-    public void level_Easy () {
-        int width_x = 8;
-        int height_y = 8;
-        int numOfBombs = 10;
-
-        Level easy = new Level (width_x, height_y, numOfBombs);
-
-    }
-
-    public void level_Medium () {
-        int width_x = 16;
-        int height_y = 16;
-        int numOfBombs = 40;
-
-        Level medium = new Level (width_x, height_y, numOfBombs);
-
-    }
-
-    public void level_Hard () {
-        int width_x = 30;
-        int height_y = 16;
-        int numOfBombs = 99;
-
-        Level hard = new Level (width_x, height_y, numOfBombs);
-
-    }
-
-    // public void level_Manual (int x, int y, int Bombs) {
-    //     Level manual = new Level (y, x, Bombs);
-
-    // }
 
 
 }

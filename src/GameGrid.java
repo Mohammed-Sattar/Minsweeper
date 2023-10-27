@@ -27,6 +27,8 @@ public class GameGrid{
 
         int [][] newGrid = new int [y_row][x_col];
         setGrid(newGrid);
+        System.out.println("6 .. executing GameGrid");
+        runner();
 
     }
 
@@ -201,8 +203,7 @@ public class GameGrid{
     
     public void runner () {
         while (getFirstClick() == null) {
-            // System.out.println(Arrays.toString(getFirstClick()));
-            System.out.println("Waiting...");
+            // System.out.println("Waiting...");
             try {
                 Thread.sleep(500); // Adjust the sleep duration as needed
             } catch (InterruptedException e) {

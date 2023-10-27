@@ -1,14 +1,13 @@
 public class Main implements Runnable{
 
-    GUI gui = new GUI(8, 8);
+    GUI gui = new GUI(5, 5);
 
     public static void main (String [] args) {
         new Thread(new Main()).start();
 
 
-        GameGrid game = new GameGrid(8,8,16);
-        int [] firstClick = {2, 2};
-        game.runner(firstClick);
+        GameGrid game = new GameGrid(5, 5);
+        game.runner();
         game.printToString();
     }
 

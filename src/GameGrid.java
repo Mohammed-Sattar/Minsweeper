@@ -5,29 +5,34 @@ import java.util.HashSet;
 // import java.util.Iterator;
 
 
-public class GameGrid implements Game{
+public class GameGrid{
     
 
-    private int width_x;
-    private int height_y;
+    public static int [] firstClick;
+    public static int [][] grid;
+    // public static int displayValue;
+
+    private int x_col;
+    private int y_row;
     private int numOfBombs;
 
-    private int [][] grid;
+    
+    
     
 
-    public GameGrid (int width_x, int height_y, int numOfBombs) {
-        setWidth_x(width_x);
-        setHeight_y(height_y);
+    public GameGrid (int y_row, int x_col, int numOfBombs) {
+        setX_col(x_col);
+        setY_row(y_row);
         setNumOfBombs(numOfBombs);
 
-        int [][] newGrid = new int [width_x][height_y];
+        int [][] newGrid = new int [y_row][x_col];
         setGrid(newGrid);
 
     }
 
     // Constructor the defines a default number of bombs
-    public GameGrid (int width_x, int height_y) {
-        this(width_x, height_y, 5);
+    public GameGrid (int y_row, int x_col) {
+        this(y_row, x_col, 5);
     }
 
     // Constructor that defines dafault values for everything
@@ -36,54 +41,55 @@ public class GameGrid implements Game{
     }
 
 
-    // Overriden Getter & Setter methods for grid implementation from interface Game
-    @Override
+    // Getter & Setter methods for static attribute grid (not neccessary)
     public int [][] getGrid() {
-        return this.grid;
+        return GameGrid.grid;
     }
-    @Override
     public void setGrid (int [][] grid) {
-        this.grid = grid;
+        GameGrid.grid = grid;
     }
 
 
-    public int getCellValue (int x, int y) {
-        return this.grid[x][y];
+    // Getter & Setter methods for the firstClick (unnecessary)
+    public int[] getFirstClick() {
+        return GameGrid.firstClick;
     }
-
-    public void setCellValue (int x, int y, int value) {
-        this.grid[x][y] = value;
-    }
-
-
-    // Overriden Getter & Setter methods for width_x attribute, implementation from interface Game
-    @Override
-    public int getWidth_x() {
-        return this.width_x;
-    }
-    @Override
-    public void setWidth_x(int width_x) {
-        this.width_x = width_x;
+    public void setFirstClick(int [] firstClick) {
+        GameGrid.firstClick = firstClick;
     }
 
 
-    // Overriden Getter & Setter methods for height_y attribute, implementation from interface Game
-    @Override
-    public int getHeight_y() {
-        return this.height_y;
+    public int getCellValue (int y, int x) {
+        return GameGrid.grid[y][x];
     }
-    @Override
-    public void setHeight_y(int height_y) {
-        this.height_y = height_y;
+
+    public void setCellValue (int y, int x, int value) {
+        GameGrid.grid[y][x] = value;
     }
 
 
-    // Overriden Getter & Setter methods for numOfBombs attribute, implementation from interface Game
-    @Override
+    // Getter & Setter methods for x_col attribute
+    public int getX_col() {
+        return this.x_col;
+    }
+    public void setX_col(int x_col) {
+        this.x_col = x_col;
+    }
+
+
+    // Getter & Setter methods for y_row attribute
+    public int getY_row() {
+        return this.y_row;
+    }
+    public void setY_row(int y_row) {
+        this.y_row = y_row;
+    }
+
+
+    // Getter & Setter methods for numOfBombs attribute
     public int getNumOfBombs() {
         return this.numOfBombs;
     }
-    @Override
     public void setNumOfBombs(int numOfBombs) {
         this.numOfBombs = numOfBombs;
     }
@@ -94,30 +100,36 @@ public class GameGrid implements Game{
     private void generateBombCoordinates (int[] firstClick) {
         Random rand = new Random(); 
 
-        int width = getWidth_x(); //5
-        int height = getHeight_y(); //5
-        int numOfCord = getNumOfBombs(); //5
+        int coloumns = getX_col(); //5
+        int rows = getY_row(); //5
         int count = 0;
 
+        if (getNumOfBombs() >= rows*coloumns) {
+            System.out.println("Number of bombs provided is too large!");
+            setNumOfBombs(rows*coloumns-1);
+            System.out.println(getNumOfBombs() + " Bombs will be generated instead.");
+        }
+
+        int numOfCord = getNumOfBombs(); //5
 
         Set <int[]> bombCoordinatesSet = new HashSet<>(); 
         // The 'Set' interface in Java is used to store a collection of unique elements. A Set does not allow duplicate values.
 
 
         while (count < numOfCord) {
-            int x = rand.nextInt(width);
-            int y = rand.nextInt(height);
+            int x = rand.nextInt(coloumns);
+            int y = rand.nextInt(rows);
 
-            if ((x == firstClick[0]) && (y == firstClick[1])) {
+            if ((y == firstClick[0]) && (x == firstClick[1]) ) {
                 continue;
             }
-            int [] coordinate = {x, y};
+            int [] coordinate = {y, x};
 
             boolean isCoordinateAdded = bombCoordinatesSet.add(coordinate);
 
-            if (isCoordinateAdded && getCellValue(x, y) != -1) {
+            if (isCoordinateAdded && getCellValue(y, x) != -1) {
 
-                setCellValue(x, y, -1);
+                setCellValue(y, x, -1);
 
                 count++;
                 System.out.println("Generated " + count + " out of " + numOfCord + " coordinates; " + Arrays.toString(coordinate));
@@ -129,14 +141,32 @@ public class GameGrid implements Game{
     private void loopCells () { 
 
         // These nested for loops go through the whole grid cell by cell
-        for (int i = 0; i < getWidth_x(); i++) {
+        for (int i = 0; i < getX_col(); i++) {
 
-            for (int j = 0; j < getHeight_y(); j++) {
+            for (int j = 0; j < getY_row(); j++) {
                 int [] cellCoordinate = {i, j};
 
                 assignSafeCell(cellCoordinate);
             }
         }
+
+        // Creating a standard grid that willbe used as the test case
+        // int[][] testGrid = {{1, 1, 1, 0, 0}, {3, -1, 2, 0, 0}, {-1, -1, 3, 1, 1}, {2, 2, 3, -1, 2}, {0, 0, 2, -1, 2}};
+        // setGrid(testGrid);
+        //  1   1   1   0   0
+
+        //  3  -1   2   0   0
+
+        // -1  -1   3   1   1
+
+        //  2   2   3  -1   2
+
+        //  0   0   2  -1   2
+
+        int y_fc = getFirstClick()[0];
+        int x_fc = getFirstClick()[1];
+        int temp = getCellValue(y_fc, x_fc);
+        setCellValue(y_fc, x_fc, temp+=10);
 
     }
 
@@ -145,41 +175,57 @@ public class GameGrid implements Game{
         int x_coordinate = cellCoordinate[0];
         int y_coordinate = cellCoordinate[1];
 
-        if (getCellValue(x_coordinate, y_coordinate) == -1) {
+        if (getCellValue(y_coordinate, x_coordinate) == -1) {
             return;
         }
 
         for (int x = (x_coordinate - 1); x <= (x_coordinate + 1); x++) {
-            if ((x < 0) || (x >= getWidth_x())) {
+            if ((x < 0) || (x >= getX_col())) {
                 continue;   //check if the x coordinate is out of bounds
             }
 
             for (int y = (y_coordinate - 1); y <= (y_coordinate + 1); y++) {
-                if ((y < 0) || (y >= getHeight_y())) {
+                if ((y < 0) || (y >= getY_row())) {
                     continue;   //check if the y coordinate is out of bounds
                 } 
 
-                if (getCellValue(x, y) == -1) {
+                if (getCellValue(y, x) == -1) {
                     ++count;
                 }
 
             }
         }
 
-        setCellValue(x_coordinate, y_coordinate, count);
+        setCellValue(y_coordinate, x_coordinate, count);
     }
     
-    public void runner (int[] firstClick) {
-        generateBombCoordinates(firstClick);
+    public void runner () {
+        while (getFirstClick() == null) {
+            // System.out.println(Arrays.toString(getFirstClick()));
+            System.out.println("Waiting...");
+            try {
+                Thread.sleep(500); // Adjust the sleep duration as needed
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        generateBombCoordinates(getFirstClick());
         loopCells();
     }
 
     public void printToString () {
 
-        for (int [] arr: this.grid) {
+        for (int [] arr: GameGrid.grid) {
 
             for (int i: arr) {
-                System.out.print(i + "  ");
+                if (i == -1) {
+                    System.out.print("  ");
+                } else {
+                    System.out.print("   ");
+                }
+                
+                System.out.print(i%10);
             }
             System.out.println("\n");
         }

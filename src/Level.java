@@ -91,7 +91,7 @@ public class Level {
     }
 
     // public void level_Manual (int x, int y, int Bombs) {
-    //     Level manual = new Level (x, y, Bombs);
+    //     Level manual = new Level (y, x, Bombs);
 
     // }
 

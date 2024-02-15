@@ -31,8 +31,12 @@ public class NewGameGUI extends JFrame{
     public class NewGamePage extends JPanel {
 
         Level level;
+        GUI playGui;
 
         private String levelSelected;
+        private int width_x;
+        private int height_y;
+        private int numOfBombs;
 
         public NewGamePage() {
 
@@ -91,25 +95,49 @@ public class NewGameGUI extends JFrame{
 
         private void checkLevel (String Level) {
             dispose();
-            switch (Level) {
+            
+            switch (Level){
                 case "Very Easy":
-                        level = new Level("Very Easy");
+                        this.width_x = 5;
+                        this.height_y = 5;
+                        this.numOfBombs = 5; 
                     break;
                 case "Easy":
-                        level = new Level("Easy");
+                        this.width_x = 8;
+                        this.height_y = 8;
+                        this.numOfBombs = 10;
                     break;
                 case "Medium":
-                        level = new Level("Medium");
+                        this.width_x = 16;
+                        this.height_y = 16;
+                        this.numOfBombs = 40;
                     break;
                 case "Hard":
-                        level = new Level("Hard");
-                    break;
-                case "Manual":
-                        level = new Level("Manual");
+                    this.width_x = 30;
+                    this.height_y = 16;
+                    this.numOfBombs = 99;
                     break;
                 default:
-                    System.out.println("Unknown Value Entered: " + Level);
+                
             }
+            // System.out.println("Selected level: " + selectedLevel);
+            // System.out.println("1 .. Still Executing in Level Constructor");
+            // new GUI(height_y, width_x);      
+            // System.out.println("2 .. Still Executing in Level Constructor");
+            // GameGrid game = new GameGrid(height_y, width_x, numOfBombs);
+            // System.out.println("3 .. Still Executing in Level Constructor");
+            // game.runner();
+            // game.printToString();
+            // System.out.println("4 .. Still Executing in Level Constructor");
+    
+            SwingUtilities.invokeLater(() -> {
+                playGui = new GUI(height_y, width_x);
+            });
+            playGui = new GUI(height_y, width_x);
+            
+            GameGrid game = new GameGrid(height_y, width_x, numOfBombs);
+            game.runner();
+            game.printToString();
 
         }
 

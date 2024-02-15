@@ -29,7 +29,7 @@ public class GUI extends JFrame{
         this.x_cols = x_cols;
         this.y_rows = y_rows;
 
-        System.err.println("5 .. Executing in GUI");
+        // System.err.println("5 .. Executing in GUI");
 
         x_cols = (x_cols * (cellPixels + 2)); //window width = total number of boxes x (size of each box + 2 pixels for spacing inbetween)
         y_rows++; //create extra row at top for menu buttons
@@ -50,13 +50,14 @@ public class GUI extends JFrame{
 
         Board board = new Board();
         this.setContentPane(board);
-        System.out.println("7 .. executing in Graphics (Board)");
+        
 
         Move move = new Move();
         this.addMouseMotionListener(move);
 
         Click click = new Click();
         this.addMouseListener(click);
+        // System.out.println("7 .. executing in GUI Constructor(end)");
     }
 
     public GUI () {
@@ -145,9 +146,9 @@ public class GUI extends JFrame{
 
 
     public class Board extends JPanel {
-        
+
         public void paintComponent(Graphics g) {
-            System.out.println("7 .. executing in Graphics (Board)");
+            // System.out.println("9 .. executing in Graphics (Board)");
             
             // int cellPixels = 50;
 
@@ -155,7 +156,7 @@ public class GUI extends JFrame{
             g.fillRect(0, 0, window_width, window_height);
 
             topBar(g);
-            System.out.println("8 .. executing in Graphics (Board)");
+            // System.out.println("10 .. executing in Graphics (Board)");
 
             for (int x = 0; x < getX_cols(); x++) {
                 for (int y = 0; y < getY_rows(); y++) {
@@ -225,7 +226,9 @@ public class GUI extends JFrame{
 
             g.setColor(Color.WHITE);
             g.setFont(new Font("Times New Roman", Font.PLAIN, 17));
-            g.drawString(("!:(" + Integer.toString(countFlags) +"/"+ Integer.toString(getNumOfBombs())+")"), 10, y_start);
+//            g.drawString(("!:(" + Integer.toString(countFlags) +"/"+ Integer.toString(getNumOfBombs())+")"), 10, y_start);
+            g.drawString(("!:(" + Integer.toString(countFlags) +"/"+ "5)"), 10, y_start);
+
 
 
             // x_start = (int)(window_width - 1.4*cellPixels);
@@ -253,6 +256,8 @@ public class GUI extends JFrame{
 
         @Override
         public void mouseMoved(MouseEvent e) {
+            // System.out.println("9 .. executing in GUI MouseMove");
+
             mouseX = e.getX();
             mouseY = e.getY();
             // System.out.println("Mouse posistion; x: " + mouseX + ", y: " + mouseY);
@@ -265,6 +270,7 @@ public class GUI extends JFrame{
         private int count = 0;
         @Override
         public void mouseClicked(MouseEvent e) {
+            // System.out.println("9 .. executing in GUI Mouse");
 
             if (inBox_Y() == -2 && inBox_X() == -2) {
                 System.out.println("New Game Clicked!!");
@@ -330,8 +336,9 @@ public class GUI extends JFrame{
                     }
                 }
             }
-            if (!containsValLess9) {
+            if (!containsValLess9 && countFlags == 5) {
                 System.out.println("YOU WON!!!");
+//                System.wait(1000);
                 System.exit(0);
             }
         }

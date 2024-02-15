@@ -1,9 +1,11 @@
-public class Main implements Runnable{
+// public class Main implements Runnable{
+public class Main {
+
 
 // GUI gui = new GUI(5, 5);
 
     public static void main (String [] args) {
-        new Thread(new Main()).start();
+        // new Thread(new Main()).start();
 
         NewGameGUI page = new NewGameGUI();
 
@@ -13,9 +15,9 @@ public class Main implements Runnable{
     }
 
 
-    @Override
-    public void run() {
+    // @Override
+    // public void run() {
         
-    }
+    // }
     
 }

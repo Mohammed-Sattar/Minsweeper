@@ -16,10 +16,6 @@ public class GameGrid{
     private int y_row;
     private int numOfBombs;
 
-    
-    
-    
-
     public GameGrid (int y_row, int x_col, int numOfBombs) {
         setX_col(x_col);
         setY_row(y_row);
@@ -202,8 +198,9 @@ public class GameGrid{
     }
     
     public void runner () {
+        System.out.println("8 .. Executing in GameGrid");
         while (getFirstClick() == null) {
-            // System.out.println("Waiting...");
+            System.out.println("Waiting...");
             try {
                 Thread.sleep(500); // Adjust the sleep duration as needed
             } catch (InterruptedException e) {
